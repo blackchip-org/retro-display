@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script type="text/javascript" src="../display.js"></script>
+
+<script type="text/javascript">
+var display;
+window.onload = function() {
+    display = createDisplay({
+        background: "#222",
+        foreground: "#d4992f",
+        font: "VT220",
+        fontSize: 20,
+        charWidth: 10,
+        charHeight: 15,
+        cols: 80,
+        rows: 25,
+    });
+
+    display.println("VM/370 ONLINE");
+    display.y = 4;
+    display.cprintln("        VV        VV   MM         MM        ");
+    display.cprintln("	      VV        VV   MMM       MMM        ");
+    display.cprintln("        VV        VV   MMMM     MMMM        ");
+    display.cprintln("        VV        VV   MM MM   MM MM        ");
+    display.cprintln(" 3333333333     777777777777MMMM  00000000  ");
+    display.cprintln("333333333333    77777777777  MM  0000000000 ");
+    display.cprintln("33      VV33    77VV    77      00MM      00");
+    display.cprintln("         V33     VV    77M      00MM      00");
+    display.cprintln("	        33    VV    77MM      00MM      00");
+    display.cprintln("       3333VV  VV    77 MM      00MM      00");
+    display.cprintln("       3333 VVVV     77 MM      00MM      00");
+    display.cprintln("	        33 VV      77 MM      00MM      00");
+    display.cprintln("	        33         77         00        00");
+    display.cprintln("33        33         77         00        00");
+    display.cprintln("333333333333         77          0000000000 ");
+    display.cprintln(" 3333333333          77           00000000  ");    
+    display.y = 24;
+    display.rprint("RUNNING");
+};
+</script>
+
+<style type="text/css">
+@font-face {
+    font-family: "VT220";
+    src: url("Glass_TTY_VT220.ttf")
+}
+
+body {
+    position: absolute;
+    margin: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+}
+
+canvas {
+    margin-left: 50px;
+    margin-top: 50px;
+}
+</style>
+
+</head>
+
+<body>
+    <canvas id="display"/>
+</body>
+
+</html>
