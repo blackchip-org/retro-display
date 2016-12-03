@@ -10,7 +10,8 @@ window.addEventListener("load", function() {
         font: "VIC20",
         fontSize: 8,
         charWidth: 16,
-        scale: 2
+        scale: 2,
+        capsLock: true
     });
 
     display
