@@ -36,6 +36,7 @@ var createDisplay = function(options) {
     self.x = options.x || 0;
     self.y = options.y || 0;
     self.capsLock = options.capsLock || false;
+    self.scrollLock = options.scrollLock || false;
     self.bgColor = options.bgColor || "#444";
     self.fgColor = options.fgColor || "#ccc";
     self.border = options.border || 0;
@@ -67,8 +68,11 @@ var createDisplay = function(options) {
     };
 
     self.rprint = function(text) {
+        var previousScrollLock = self.scrollLock;
+        self.scrollLock = true;
         self.x = cols - text.length;
         self.print(text);
+        self.scrollLock = previousScrollLock;
         return self;
     };
 
@@ -86,6 +90,9 @@ var createDisplay = function(options) {
     };
 
     self.scroll = function() {
+        if (self.scrollLock) {
+            return;
+        }
         for (var x = 0; x < cols; x++) {
             self.buffer[x].shift();
             self.buffer[x][rows - 1] = {
