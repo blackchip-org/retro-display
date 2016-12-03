@@ -1,14 +1,22 @@
 
-var fontTest7 = function(spec) {
-    var device = spec || display;
-    for (var i = 32; i <= 127; i++) {
-        device.print(String.fromCharCode(i));
+var __font = function(to) {
+    display.println();
+    for (var i = 32; i <= to; i++) {
+        display.print(String.fromCharCode(i));
     }
-    device.println();
-    for (var i = 32; i <= 127; i++) {
-        device.print(String.fromCharCode(i));
+    display.println();
+    for (var i = 32; i <= to; i++) {
+        display.print(String.fromCharCode(i));
     }        
-    device.println();
+    display.println();
+};
+
+var font7 = function() {
+    __font(127);
+};
+
+var font8 = function() {
+    __font(255);
 };
 
 var run = function(display, options) {
@@ -44,3 +52,5 @@ var run = function(display, options) {
     showPrompt();
     display.input(process);
 };
+
+var math = Math;
