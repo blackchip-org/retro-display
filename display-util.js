@@ -54,3 +54,4 @@ var run = function(display, options) {
 };
 
 var math = Math;
+var array = Array;
