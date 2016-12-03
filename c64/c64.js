@@ -12,8 +12,8 @@ window.addEventListener("load", function() {
     display = createDisplay({
         cols: 40,
         rows: 25,
-        background: "#4736ae",
-        foreground: "#8578e2",
+        bgColor: "#4736ae",
+        fgColor: "#8578e2",
         font: "C64",
         fontSize: 8,
         baselineOffset: 1,

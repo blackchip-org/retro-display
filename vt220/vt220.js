@@ -4,8 +4,8 @@ window.onload = function() {
     display = createDisplay({
         cols: 80,
         rows: 25,
-        background: "#222",
-        foreground: "#d4992f",
+        bgColor: "#222",
+        fgColor: "#d4992f",
         font: "VT220",
         fontSize: 20,
         charWidth: 10,
@@ -33,8 +33,5 @@ window.onload = function() {
     display.cprintln(" 3333333333          77           00000000  ");    
     display.y = 24;
     display.rprint("RUNNING");
-
-    display.x = 0;
-    display.y = 0;
 };
 

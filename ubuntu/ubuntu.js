@@ -1,10 +1,13 @@
 var display;
  
 window.addEventListener("load", function() {
+    textColor = "#eee";
+
     display = createDisplay({
         cols: 80,
         rows: 40,
-        background: "#310a25",
+        bgColor: "#310a25",
+        fgColor: textColor,
         font: "Ubuntu",
         fontSize: 16,
         charHeight: 18,
@@ -30,5 +33,11 @@ window.addEventListener("load", function() {
         .println("  http://www.ubuntu.com/business/services/cloud")
         .println()
         .println()
-        .print("root@localhost:/# ");
+        .color("#86f82e")
+        .print("root@localhost")
+        .color(textColor)
+        .print(":")
+        .color("#64a6c8")
+        .print("/# ")
+        .color(textColor);
 });

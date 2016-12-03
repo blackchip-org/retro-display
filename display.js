@@ -5,8 +5,10 @@ var createDisplay = function(options) {
     var self = {};
     
     var canvasId = options.id || "display";
+
     var cols = options.cols || 80;
     var rows = options.rows || 40;
+    
     var font = options.font || "monospace";
     var fontSize = options.fontSize || 8;
     var charWidth = options.charWidth || fontSize;
@@ -14,11 +16,9 @@ var createDisplay = function(options) {
     var baselineOffset = options.baselineOffset || 0; 
     var scale = options.scale || 1;
 
-    self.background = options.background || "#444";
-    self.foreground = options.foreground || "#ccc";
-
     var displayWidth = charWidth * cols * scale;
     var displayHeight = charHeight * rows * scale;
+
     var keyTime = 0;
     var keyPressed = false;
     var frameTimer = null;
@@ -32,9 +32,11 @@ var createDisplay = function(options) {
     canvas.style.height = displayHeight + "px";
 
     self.buffer = [];
-    self.x = 0;
-    self.y = 0;
+    self.x = options.x || 0;
+    self.y = options.y || 0;
     self.capsLock = options.capsLock || false;
+    self.bgColor = options.bgColor || "#444";
+    self.fgColor = options.fgColor || "#ccc";
 
     self.print = function(text) {
         for (var i = 0; i < text.length; i++) {
@@ -66,9 +68,17 @@ var createDisplay = function(options) {
         return self;
     };
 
+    self.color = function(fgColor, bgColor) {
+        self.fgColor = fgColor;
+        if (bgColor) {
+            self.bgColor = bgColor;
+        }
+        return this;
+    };
+
     self.backspace = function() {
-        self.buffer[self.x][self.y].text = " ";
         self.left();
+        self.buffer[self.x][self.y].text = " ";
     };
 
     self.scroll = function() {
@@ -76,8 +86,8 @@ var createDisplay = function(options) {
             self.buffer[x].shift();
             self.buffer[x][height - 1] = {
                 text: " ",
-                foreground: self.foreground, 
-                background: self.background
+                fgColor: self.fgColor,
+                bgColor: self.bgColor
             }
         }
         return self;
@@ -89,8 +99,8 @@ var createDisplay = function(options) {
             for (var y = 0; y < rows; y++) {
                 self.buffer[x][y] = {
                     text: " ",
-                    foreground: self.foreground, 
-                    background: self.background
+                    fgColor: self.fgColor,
+                    bgColor: self.bgColor
                 }
             }
         }
@@ -108,10 +118,10 @@ var createDisplay = function(options) {
         var sy1 = y * charHeight * scale;
         var sy2 = (y + 1) * charHeight * scale;
 
-        g.fillStyle = cell.background;
+        g.fillStyle = cell.bgColor;
         g.fillRect(sx, sy1, charWidth * scale, charHeight * scale);
 
-        g.fillStyle = cell.foreground;
+        g.fillStyle = cell.fgColor;
         g.fillText(cell.text, sx, sy2 - (baselineOffset * scale)); 
     };
 
@@ -128,8 +138,8 @@ var createDisplay = function(options) {
         var cell = self.buffer[self.x][self.y];
         renderCell(self.x, self.y, {
             text: cell.text, 
-            foreground: cell.background,
-            background: cell.foreground
+            fgColor: cell.bgColor,
+            bgColor: cell.fgColor
         });
     };
 
@@ -197,12 +207,14 @@ var createDisplay = function(options) {
         if (char === "\n") {
             nextLine();
         } else {
-            self.buffer[self.x][self.y].text = char;
+            self.buffer[self.x][self.y] = {
+                text: char,
+                bgColor: self.bgColor,
+                fgColor: self.fgColor
+            };
             advance();
         }
     };
-
-
 
     // Use down for repeat events
     var keydown = function(event) {
