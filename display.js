@@ -38,6 +38,9 @@ var createDisplay = function(options) {
     self.capsLock = options.capsLock || false;
     self.bgColor = options.bgColor || "#444";
     self.fgColor = options.fgColor || "#ccc";
+    self.border = options.border || 0;
+    self.borderColor = options.borderColor || "#000";
+    self.borderRadius = options.borderRadius || 0;
 
     self.print = function(text) {
         for (var i = 0; i < text.length; i++) {
@@ -145,6 +148,15 @@ var createDisplay = function(options) {
     };
 
     var render = function(time) {
+        var previousBorder = window.getComputedStyle(canvas, null);
+        var currentBorder = "0px none rgb(0, 0, 0)";
+        if (self.border > 0) {
+            currentBorder = self.border + "px solid " + self.borderColor;
+        }
+        if (currentBorder !== previousBorder) {
+            canvas.style.border = currentBorder;
+            canvas.style.borderRadius = self.borderRadius + "px";
+        }
         var scaledFontSize = fontSize * scale;
         g.font = scaledFontSize + "px " + font; 
         for (var x = 0; x < cols; x++) {

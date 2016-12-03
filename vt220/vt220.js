@@ -10,7 +10,10 @@ window.onload = function() {
         fontSize: 20,
         charWidth: 10,
         charHeight: 20,
-        baselineOffset: 3
+        baselineOffset: 3,
+        border: 50,
+        borderColor: "#444",
+        borderRadius: 20
     });
 
     display.println("VM/370 ONLINE");

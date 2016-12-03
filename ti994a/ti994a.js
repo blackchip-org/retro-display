@@ -11,7 +11,10 @@ window.addEventListener("load", function() {
         fontSize: 16,
         charWidth: 6,
         charHeight: 8,
-        scale: 3
+        scale: 3,
+        border: 50,
+        borderColor: "#40e8f0",
+        borderRadius: 20
     });
 
     display.y = 16;

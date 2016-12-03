@@ -17,8 +17,11 @@ window.addEventListener("load", function() {
         font: "C128",
         fontSize: 8,
         baselineOffset: 1,
-        scale: 3,
-        capsLock: true
+        scale: 2,
+        capsLock: true,
+        border: 50,
+        borderColor: "#b2ed8a",
+        borderRadius: 20
     });
 
     display
