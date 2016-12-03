@@ -12,7 +12,9 @@ window.addEventListener("load", function() {
         fontSize: 16,
         charHeight: 18,
         charWidth: 8,
-        baselineOffset: 3
+        baselineOffset: 3,
+        border: 2, 
+        borderColor: "#310a25"
     });
 
     display
