@@ -88,7 +88,7 @@ var createDisplay = function(options) {
     self.scroll = function() {
         for (var x = 0; x < cols; x++) {
             self.buffer[x].shift();
-            self.buffer[x][height - 1] = {
+            self.buffer[x][rows - 1] = {
                 text: " ",
                 fgColor: self.fgColor,
                 bgColor: self.bgColor
@@ -170,11 +170,10 @@ var createDisplay = function(options) {
 
     var nextLine = function() {
         self.x = 0;
-        if (self.y < cols - 1) {
+        if (self.y < rows - 1) {
             self.y += 1;
-            if (self.y >= rows) {
-                self.y = rows - 1;
-            }
+        } else {
+            self.scroll();
         }
     };
 
