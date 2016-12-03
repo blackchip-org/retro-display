@@ -19,6 +19,7 @@ var createDisplay = function(options) {
     var displayWidth = charWidth * cols * scale;
     var displayHeight = charHeight * rows * scale;
 
+    var keyHandled = false;
     var keyTime = 0;
     var keyPressed = false;
     var frameTimer = null;
@@ -219,6 +220,7 @@ var createDisplay = function(options) {
     // Use down for repeat events
     var keydown = function(event) {
         keyPressed = true;
+        keyHandled = true;
         if (event.keyCode === 38) {
             self.up();
         } else if (event.keyCode === 40) {
@@ -229,13 +231,17 @@ var createDisplay = function(options) {
             self.right();
         } else if (event.keyCode === 8) {
             self.backspace();
+            event.preventDefault();
         } else if (event.keyCode === 13) {
             self.println();
+        } else {
+            keyHandled = false;
         }
     };
 
     var keypress = function(event) {
-        if (event.keyCode < 32) {
+        if (keyHandled) {
+            keyHandled = false;
             return;
         }
         self.print(event.key);
