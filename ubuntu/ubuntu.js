@@ -1,5 +1,5 @@
 var display;
- 
+
 window.addEventListener("load", function() {
     textColor = "#eee";
 
@@ -32,12 +32,19 @@ window.addEventListener("load", function() {
         .println("Get cloud support with Ubuntu Advantage Cloud Guest")
         .println("  http://www.ubuntu.com/business/services/cloud")
         .println()
-        .println()
-        .color("#86f82e")
-        .print("root@localhost")
-        .color(textColor)
-        .print(":")
-        .color("#64a6c8")
-        .print("/# ")
-        .color(textColor);
+        .println();
+
+    run(display, {
+        prompt: function() {
+            display
+                .color("#86f82e")
+                .print("root@localhost")
+                .color(textColor)
+                .print(":")
+                .color("#64a6c8")
+                .print("/# ")
+                .color(textColor);
+        }
+    });
+
 });

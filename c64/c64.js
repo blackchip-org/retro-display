@@ -21,7 +21,8 @@ window.addEventListener("load", function() {
         capsLock: true,
         border: 50,
         borderColor: "#8578e2",
-        borderRadius: 20
+        borderRadius: 20,
+        free: true
     });
 
     display
@@ -29,7 +30,10 @@ window.addEventListener("load", function() {
         .println()
         .cprintln("**** COMMODORE 64 BASIC V2 ****")
         .println()
-        .cprintln("64K RAM SYSTEM  38911 BASIC BYTES FREE")
-        .println()
-        .println("READY.");
+        .cprintln("64K RAM SYSTEM  38911 BASIC BYTES FREE");
+
+    run(display, {
+        prompt: "\nREADY.\n"
+    });
+
 });

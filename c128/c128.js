@@ -21,7 +21,8 @@ window.addEventListener("load", function() {
         capsLock: true,
         border: 50,
         borderColor: "#b2ed8a",
-        borderRadius: 20
+        borderRadius: 20,
+        free: true
     });
 
     display
@@ -30,7 +31,10 @@ window.addEventListener("load", function() {
         .cprintln("COMMODORE BASIC V7.0 122365 BYTES FREE")
         .cprintln("(C)1986 COMMODORE ELECTRONICS, LTD.")
         .cprintln("(C)1977 MICROSOFT CORP.")
-        .cprintln("ALL RIGHTS RESERVED")
-        .println()
-        .println("READY.");
+        .cprintln("ALL RIGHTS RESERVED");
+
+    run(display, {
+        prompt: "\nREADY.\n"
+    });
+
 });

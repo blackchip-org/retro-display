@@ -14,12 +14,16 @@ window.addEventListener("load", function() {
         capsLock: true,
         border: 50,
         borderColor: "#57cad9",
-        borderRadius: 20
+        borderRadius: 20,
+        free: true
     });
 
     display
         .println("**** CBM BASIC V2 ****")
-        .println("3853 BYTES FREE")
-        .println()
-        .println("READY.");
+        .println("3853 BYTES FREE");
+
+    run(display, {
+        prompt: "\nREADY.\n"
+    });
+
 });

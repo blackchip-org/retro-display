@@ -24,6 +24,11 @@ var createDisplay = function(options) {
     var keyPressed = false;
     var frameTimer = null;
 
+    var inputBuffer = [];
+    var inputStart = {};
+    var inputPos = 0;
+    var inputCallback = null;
+
     var canvas = document.getElementById(canvasId);
     var g = canvas.getContext("2d");
 
@@ -42,6 +47,7 @@ var createDisplay = function(options) {
     self.border = options.border || 0;
     self.borderColor = options.borderColor || "#000";
     self.borderRadius = options.borderRadius || 0;
+    self.free = options.free || false;
 
     self.print = function(text) {
         for (var i = 0; i < text.length; i++) {
@@ -76,6 +82,29 @@ var createDisplay = function(options) {
         return self;
     };
 
+    self.printAt = function(x, y, text) {
+        for (var i = 0; i < text.length; i++) {
+            self.buffer[x][y].text = text[i];
+            x += 1;
+            if (x >= cols) {
+                x = 0;
+                if (y === rows - 1) {
+                    self.scroll();
+                } else {
+                    y += 1;
+                }
+            }
+        }
+    };
+
+    self.lineAt = function(y) {
+        var result = "";
+        for (var x = 0; x < cols; x++) {
+            result += self.buffer[x][y].text;
+        }
+        return result.trim();
+    };
+
     self.color = function(fgColor, bgColor) {
         self.fgColor = fgColor;
         if (bgColor) {
@@ -85,8 +114,18 @@ var createDisplay = function(options) {
     };
 
     self.backspace = function() {
-        self.left();
-        self.buffer[self.x][self.y].text = " ";
+        if (self.free) {
+            self.left();
+            self.buffer[self.x][self.y].text = " ";
+        } else if (inputCallback) {
+            if (inputPos > 0) {
+                inputBuffer.splice(inputPos - 1);
+                inputBuffer.push(" ");
+                inputPos -= 1;
+                self.left();
+                self.printAt(inputStart.x, inputStart.y, inputBuffer);
+            }
+        }
     };
 
     self.scroll = function() {
@@ -101,7 +140,15 @@ var createDisplay = function(options) {
                 bgColor: self.bgColor
             }
         }
+        if (inputStart) {
+            inputStart.y -= 1;
+        }
         return self;
+    };
+
+    self.input = function(callback) {
+        inputStart = {x: self.x, y: self.y};
+        inputCallback = callback;
     };
 
     self.clear = function() {
@@ -137,6 +184,9 @@ var createDisplay = function(options) {
     };
 
     var renderCursor = function(time) {
+        if (!inputCallback && !self.free) {
+            return;
+        }
         if (keyPressed) {
             keyPressed = false;
             keyTime = time;
@@ -194,14 +244,24 @@ var createDisplay = function(options) {
     self.left = function() {
         self.x -= 1;
         if (self.x < 0) {
-            self.x = 0;
+            if (self.y > 0) {
+                self.x = cols - 1;
+                self.y -= 1;
+            } else {
+                self.x = 0;
+            }
         }
     };
 
     self.right = function() {
         self.x += 1;
         if (self.x >= cols) {
-            self.x = cols - 1;
+            self.x = 0; 
+            if (self.y === rows - 1) {
+                self.scroll();
+            } else {
+                self.y += 1
+            }
         }
     };
 
@@ -235,23 +295,69 @@ var createDisplay = function(options) {
         }
     };
 
+    var previousChar = function() {
+        if (self.free) {
+            self.left();
+            return;
+        }
+        if (!inputCallback) {
+            return;
+        }
+        if (inputPos <= 0) {
+            return;
+        }
+        self.left();
+        inputPos -= 1;
+    };
+
+    var nextChar = function() {
+        if (self.free) {
+            self.right();
+            return;
+        }
+        if (!inputCallback) {
+            return;
+        }
+        if (inputPos >= inputBuffer.length) {
+            return;
+        }
+        self.right();
+        inputPos += 1;
+    };
+
     // Use down for repeat events
     var keydown = function(event) {
         keyPressed = true;
         keyHandled = true;
-        if (event.keyCode === 38) {
+        if (event.keyCode === 38 && self.free) {
             self.up();
-        } else if (event.keyCode === 40) {
+        } else if (event.keyCode === 40 && self.free) {
             self.down();
         } else if (event.keyCode === 37) {
-            self.left();
+            previousChar();
         } else if (event.keyCode === 39) {
-            self.right();
+            nextChar();
         } else if (event.keyCode === 8) {
             self.backspace();
             event.preventDefault();
         } else if (event.keyCode === 13) {
             self.println();
+            if (inputCallback) {
+                var result = "";
+                if (self.free) {
+                    var result = self.lineAt(self.y - 1);
+                } else {
+                    var result = inputBuffer.join("").trim();
+                }
+                if (!inputCallback(result)) {
+                    inputCallback = null;
+                    inputStart = null;
+                } else {
+                    inputPos = 0;
+                    inputBuffer = [];
+                    inputStart = {x: self.x, y: self.y};
+                }
+            }
         } else {
             keyHandled = false;
         }
@@ -262,7 +368,15 @@ var createDisplay = function(options) {
             keyHandled = false;
             return;
         }
-        self.print(event.key);
+        if (self.free) {
+            self.print(event.key);
+        } else if (inputCallback) {
+            inputBuffer[inputPos] = event.key;
+            inputPos += 1;
+            //console.log("buffer", inputBuffer);
+            self.right();
+            self.printAt(inputStart.x, inputStart.y, inputBuffer);
+        }
     };
 
     self.stop = function() {

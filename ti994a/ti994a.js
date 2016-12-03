@@ -17,14 +17,12 @@ window.addEventListener("load", function() {
         borderRadius: 20
     });
 
-    display.y = 16;
+    display.y = 22;
     display
         .println("TI BASIC READY")
         .println()
-        .println(">10 PRINT \"Hello World!\"")
-        .println(">RUN")
-        .println("Hello World!")
-        .println()
-        .println("** DONE **")
-        .print(">")
+
+    run(display, {
+        prompt: ">"
+    });
 });

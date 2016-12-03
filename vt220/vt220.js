@@ -13,7 +13,8 @@ window.onload = function() {
         baselineOffset: 3,
         border: 50,
         borderColor: "#444",
-        borderRadius: 20
+        borderRadius: 20,
+        free: true
     });
 
     display.println("VM/370 ONLINE");
