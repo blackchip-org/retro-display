@@ -119,7 +119,7 @@ var createDisplay = function(options) {
             self.buffer[self.x][self.y].text = " ";
         } else if (inputCallback) {
             if (inputPos > 0) {
-                inputBuffer.splice(inputPos - 1);
+                inputBuffer.splice(inputPos - 1, 1);
                 inputBuffer.push(" ");
                 inputPos -= 1;
                 self.left();
