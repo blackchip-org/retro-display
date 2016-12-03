@@ -1,48 +1,32 @@
-var display;
- 
-var c64 = function() {
-    var self = {};
+var display
 
-    self.boot = function() {
-        display
-            .clear()
-            .println()
-            .cprintln("**** COMMODORE 64 BASIC V2 ****")
-            .println()
-            .cprintln("64K RAM SYSTEM  38911 BASIC BYTES FREE")
-            .println()
-            .println("READY.");
-    };
-
-    self.fontTest = function() {
-        display.reset();
-        for (var i = 32; i <= 127; i++) {
-            display.print(String.fromCharCode(i));
-        }
-        display.ln();
-        for (var i = 32; i <= 127; i++) {
-            display.print(String.fromCharCode(i));
-        }        
-        display.ln();
-        display.ln();
-        display.println("\u250c\u2534");
-        display.println("\u2514\u2534");
-    };
-
-    return self;
-}();
+var boxTest = function() {
+    display.println("\ue0b0\u2500\u252c\u2500\u2510");
+    display.println("\ue0dd \u2502 \u2502");
+    display.println("\u251c\u2500\u253c\u2500\u2524");
+    display.println("\u2502 \u2502 \u2502");
+    display.println("\u2514\u2500\u2534\u2500\u2518");
+};
 
 window.addEventListener("load", function() {
     display = createDisplay({
         cols: 40,
         rows: 25,
-        background: "#4040e0",
-        foreground: "#a0a0fc",
+        background: "#4736ae",
+        foreground: "#8578e2",
         font: "C64",
-        fontSize: 20,
-        charWidth: 20,
-        charHeight: 23,
-        charHeightOffset: 3,
+        fontSize: 8,
+        baselineOffset: 1,
+        scale: 3,
+        capsLock: true
     });
-    c64.boot();
+
+    display
+        .clear()
+        .println()
+        .cprintln("**** COMMODORE 64 BASIC V2 ****")
+        .println()
+        .cprintln("64K RAM SYSTEM  38911 BASIC BYTES FREE")
+        .println()
+        .println("READY.");
 });

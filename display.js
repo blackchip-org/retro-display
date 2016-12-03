@@ -1,35 +1,40 @@
 
-var createDisplay = function(spec) {
+var createDisplay = function(options) {
 
-    spec = spec || {};
+    options = options || {};
     var self = {};
     
-    var canvasId = spec.canvasId || "display";
-    var cols = 80;
-    var rows = 25;
-    var frameTimer = null;
+    var canvasId = options.id || "display";
+    var cols = options.cols || 80;
+    var rows = options.rows || 40;
+    var font = options.font || "monospace";
+    var fontSize = options.fontSize || 8;
+    var charWidth = options.charWidth || fontSize;
+    var charHeight = options.charHeight || fontSize; 
+    var baselineOffset = options.baselineOffset || 0; 
+    var scale = options.scale || 1;
 
-    var fontSize = 16;
-    var charWidth;
-    var charHeight;
-    var charHeightOffset = 0; 
+    self.background = options.background || "#444";
+    self.foreground = options.foreground || "#ccc";
 
+    var displayWidth = charWidth * cols * scale;
+    var displayHeight = charHeight * rows * scale;
     var keyTime = 0;
     var keyPressed = false;
-
-    self.font = spec.font || "monospace";
-    self.background = spec.background || "#444";
-    self.foreground = spec.foreground || "#ccc";
+    var frameTimer = null;
 
     var canvas = document.getElementById(canvasId);
     var g = canvas.getContext("2d");
 
-    var displayWidth;
-    var displayHeight;
+    canvas.width = displayWidth;
+    canvas.height = displayHeight;
+    canvas.style.width = displayWidth + "px";
+    canvas.style.height = displayHeight + "px";
 
     self.buffer = [];
     self.x = 0;
     self.y = 0;
+    self.capsLock = options.capsLock || false;
 
     self.print = function(text) {
         for (var i = 0; i < text.length; i++) {
@@ -78,32 +83,6 @@ var createDisplay = function(spec) {
         return self;
     };
 
-    self.resize = function(options) {
-        var dirty = (cols !== options.cols) || (rows != options.rows);
-        cols = options.cols || cols;
-        rows = options.rows || rows;
-
-        fontSize = options.fontSize || fontSize;
-        g.font = fontSize + "px " + self.font; 
-        var metricsWidth = g.measureText("X").width;
-
-        charWidth = options.charWidth || metricsWidth;
-        charHeight = options.charHeight || metricsWidth;
-        charHeightOffset = options.charHeightOffset || 0;
-
-        displayWidth = charWidth * cols;
-        displayHeight = charHeight * rows;
-
-        canvas.width = displayWidth;
-        canvas.height = displayHeight;
-        canvas.style.width = displayWidth + "px";
-        canvas.style.height = displayHeight + "px";
-
-        if (dirty) {
-            self.reset();
-        }
-    };
-
     self.clear = function() {
         for (var x = 0; x < cols; x++) {
             self.buffer[x] = [];
@@ -125,15 +104,15 @@ var createDisplay = function(spec) {
     };
 
     var renderCell = function(x, y, cell) {
-        var sx = x * charWidth;
-        var sy1 = y * charHeight;
-        var sy2 = (y + 1) * charHeight;
+        var sx = x * charWidth * scale;
+        var sy1 = y * charHeight * scale;
+        var sy2 = (y + 1) * charHeight * scale;
 
         g.fillStyle = cell.background;
-        g.fillRect(sx, sy1, charWidth, charHeight);
+        g.fillRect(sx, sy1, charWidth * scale, charHeight * scale);
 
         g.fillStyle = cell.foreground;
-        g.fillText(cell.text, sx, sy2 - charHeightOffset); 
+        g.fillText(cell.text, sx, sy2 - (baselineOffset * scale)); 
     };
 
     var renderCursor = function(time) {
@@ -155,7 +134,8 @@ var createDisplay = function(spec) {
     };
 
     var render = function(time) {
-        g.font = fontSize + "px " + self.font; 
+        var scaledFontSize = fontSize * scale;
+        g.font = scaledFontSize + "px " + font; 
         for (var x = 0; x < cols; x++) {
             for (var y = 0; y < rows; y++) {
                 renderCell(x, y, self.buffer[x][y]);
@@ -211,6 +191,9 @@ var createDisplay = function(spec) {
     };
 
     var charout = function(char) {
+        if (self.capsLock) {
+            char = char.toUpperCase();
+        }
         if (char === "\n") {
             nextLine();
         } else {
@@ -259,7 +242,6 @@ var createDisplay = function(spec) {
         window.addEventListener("keypress", keypress);
     };
 
-    self.resize(spec);
     self.clear();
     self.start();
 

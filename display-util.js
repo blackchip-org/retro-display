@@ -1,11 +1,12 @@
 
-fontTest7 = function(display) {
-    display.reset();
+fontTest7 = function(spec) {
+    var device = spec || display;
     for (var i = 32; i <= 127; i++) {
-        display.print(String.fromCharCode(i));
+        device.print(String.fromCharCode(i));
     }
-    display.println();
+    device.println();
     for (var i = 32; i <= 127; i++) {
-        display.print(String.fromCharCode(i));
+        device.print(String.fromCharCode(i));
     }        
+    device.println();
 };
