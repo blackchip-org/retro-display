@@ -10,12 +10,11 @@ window.addEventListener("load", function() {
         font: "VIC20",
         fontSize: 8,
         charWidth: 16,
+        baselineOffset: 1,
         scale: 2,
-        capsLock: true,
         border: 50,
         borderColor: "#57cad9",
-        borderRadius: 20,
-        free: true
+        borderRadius: 20
     });
 
     display

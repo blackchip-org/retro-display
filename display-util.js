@@ -1,4 +1,3 @@
-
 var run = function(display, options) {
 
     options = options || {};
@@ -15,7 +14,7 @@ var run = function(display, options) {
 
     var process = function(command) {
         try {
-            if (display.capsLock) {
+            if (display.caps) {
                 command = command.toLowerCase();
             }
             var result = eval(command);
@@ -55,7 +54,8 @@ var font8 = function() {
 
 var clear = function() {
     display.reset();
-}
+};
 
 var math = Math;
 var array = Array;
+

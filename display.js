@@ -29,6 +29,8 @@ var createDisplay = function(options) {
     var inputPos = 0;
     var inputCallback = null;
 
+    var overflow = [];
+
     var canvas = document.getElementById(canvasId);
     var g = canvas.getContext("2d");
 
@@ -40,7 +42,7 @@ var createDisplay = function(options) {
     self.buffer = [];
     self.x = options.x || 0;
     self.y = options.y || 0;
-    self.capsLock = options.capsLock || false;
+    self.caps = options.caps || false;
     self.scrollLock = options.scrollLock || false;
     self.bgColor = options.bgColor || "#444";
     self.fgColor = options.fgColor || "#ccc";
@@ -57,7 +59,7 @@ var createDisplay = function(options) {
     };
 
     self.println = function(text) {
-        if (!text) {
+        if (text === undefined) {
             text = "";
         }
         self.print(text + "\n");
@@ -84,7 +86,11 @@ var createDisplay = function(options) {
 
     self.printAt = function(x, y, text) {
         for (var i = 0; i < text.length; i++) {
-            self.buffer[x][y].text = text[i];
+            var char = text[i];
+            if (self.caps) {
+                char = char.toUpperCase();
+            }
+            self.buffer[x][y].text = char;
             x += 1;
             if (x >= cols) {
                 x = 0;
@@ -155,6 +161,7 @@ var createDisplay = function(options) {
         for (var x = 0; x < cols; x++) {
             self.buffer[x] = [];
             for (var y = 0; y < rows; y++) {
+                overflow[y] = {previous: false, next: false};
                 self.buffer[x][y] = {
                     text: " ",
                     fgColor: self.fgColor,
@@ -280,7 +287,7 @@ var createDisplay = function(options) {
     };
 
     var charout = function(char) {
-        if (self.capsLock) {
+        if (self.caps) {
             char = char.toUpperCase();
         }
         if (char === "\n") {
@@ -370,9 +377,12 @@ var createDisplay = function(options) {
         }
         if (self.free) {
             self.print(event.key);
+            if (self.x === 0) {
+                overflow[self.y].previous = true;
+                overflow[self.y - 1].next = true;
+            }
         } else if (inputCallback) {
             inputBuffer.splice(inputPos, 0, event.key);
-            //inputBuffer[inputPos] = event.key;
             inputPos += 1;
             //console.log("buffer", inputBuffer);
             self.right();

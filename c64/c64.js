@@ -18,11 +18,9 @@ window.addEventListener("load", function() {
         fontSize: 8,
         baselineOffset: 1,
         scale: 2,
-        capsLock: true,
         border: 50,
         borderColor: "#8578e2",
-        borderRadius: 20,
-        free: true
+        borderRadius: 20
     });
 
     display

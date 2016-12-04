@@ -1,4 +1,4 @@
-var display
+var display;
 
 var boxTest = function() {
     display.println("\ue0b0\u2500\u252c\u2500\u2510");
@@ -18,11 +18,9 @@ window.addEventListener("load", function() {
         fontSize: 8,
         baselineOffset: 1,
         scale: 2,
-        capsLock: true,
         border: 50,
         borderColor: "#b2ed8a",
-        borderRadius: 20,
-        free: true
+        borderRadius: 20
     });
 
     display
