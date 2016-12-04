@@ -371,7 +371,8 @@ var createDisplay = function(options) {
         if (self.free) {
             self.print(event.key);
         } else if (inputCallback) {
-            inputBuffer[inputPos] = event.key;
+            inputBuffer.splice(inputPos, 0, event.key);
+            //inputBuffer[inputPos] = event.key;
             inputPos += 1;
             //console.log("buffer", inputBuffer);
             self.right();
