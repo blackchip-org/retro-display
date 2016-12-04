@@ -1,24 +1,4 @@
 
-var __font = function(to) {
-    display.println();
-    for (var i = 32; i <= to; i++) {
-        display.print(String.fromCharCode(i));
-    }
-    display.println();
-    for (var i = 32; i <= to; i++) {
-        display.print(String.fromCharCode(i));
-    }        
-    display.println();
-};
-
-var font7 = function() {
-    __font(127);
-};
-
-var font8 = function() {
-    __font(255);
-};
-
 var run = function(display, options) {
 
     options = options || {};
@@ -52,6 +32,30 @@ var run = function(display, options) {
     showPrompt();
     display.input(process);
 };
+
+var __font = function(to) {
+    display.println();
+    for (var i = 32; i <= to; i++) {
+        display.print(String.fromCharCode(i));
+    }
+    display.println();
+    for (var i = 32; i <= to; i++) {
+        display.print(String.fromCharCode(i));
+    }        
+    display.println();
+};
+
+var font7 = function() {
+    __font(127);
+};
+
+var font8 = function() {
+    __font(255);
+};
+
+var clear = function() {
+    display.reset();
+}
 
 var math = Math;
 var array = Array;
