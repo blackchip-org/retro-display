@@ -153,6 +153,8 @@ var createDisplay = function(options) {
     };
 
     self.input = function(callback) {
+        inputBuffer = [];
+        inputPos = 0;
         inputStart = {x: self.x, y: self.y};
         inputCallback = callback;
     };
