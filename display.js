@@ -351,22 +351,7 @@ var createDisplay = function(options) {
             event.preventDefault();
         } else if (event.keyCode === 13) {
             self.println();
-            if (inputCallback) {
-                var result = "";
-                if (self.free) {
-                    var result = self.lineAt(self.y - 1);
-                } else {
-                    var result = inputBuffer.join("").trim();
-                }
-                if (!inputCallback(result)) {
-                    inputCallback = null;
-                    inputStart = null;
-                } else {
-                    inputPos = 0;
-                    inputBuffer = [];
-                    inputStart = {x: self.x, y: self.y};
-                }
-            }
+            handleInput();
         } else {
             keyHandled = false;
         }
@@ -390,6 +375,22 @@ var createDisplay = function(options) {
             self.right();
             self.printAt(inputStart.x, inputStart.y, inputBuffer);
         }
+    };
+
+    var handleInput = function() {
+        if (!inputCallback) {
+            return;
+        }
+        var result = "";
+        if (self.free) {
+            var result = self.lineAt(self.y - 1);
+        } else {
+            var result = inputBuffer.join("").trim();
+        }
+        // Save reference in case the callback wants to reschedule
+        var callback = inputCallback;
+        inputCallback = null;
+        callback(result);
     };
 
     self.stop = function() {

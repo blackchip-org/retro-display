@@ -25,7 +25,7 @@ var run = function(display, options) {
             display.println(error);
         }
         showPrompt();
-        return true;
+        display.input(process);
     };
 
     showPrompt();
