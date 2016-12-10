@@ -8,7 +8,8 @@ var createDisplay = function(options) {
 
     var cols = options.cols || 80;
     var rows = options.rows || 40;
-    
+    var padding = options.padding || 0;
+
     var font = options.font || "monospace";
     var fontSize = options.fontSize || 8;
     var charWidth = options.charWidth || fontSize;
@@ -16,8 +17,8 @@ var createDisplay = function(options) {
     var baselineOffset = options.baselineOffset || 0; 
     var scale = options.scale || 1;
 
-    var displayWidth = charWidth * cols * scale;
-    var displayHeight = charHeight * rows * scale;
+    var displayWidth = (charWidth * cols * scale) + (padding * 2);
+    var displayHeight = (charHeight * rows * scale) + (padding * 2);
 
     var keyHandled = false;
     var keyTime = 0;
@@ -181,9 +182,9 @@ var createDisplay = function(options) {
     };
 
     var renderCell = function(x, y, cell) {
-        var sx = x * charWidth * scale;
-        var sy1 = y * charHeight * scale;
-        var sy2 = (y + 1) * charHeight * scale;
+        var sx = (x * charWidth * scale) + padding;
+        var sy1 = (y * charHeight * scale) + padding;
+        var sy2 = ((y + 1) * charHeight * scale) + padding;
 
         g.fillStyle = cell.bgColor;
         g.fillRect(sx, sy1, charWidth * scale, charHeight * scale);
@@ -223,6 +224,10 @@ var createDisplay = function(options) {
             canvas.style.border = currentBorder;
             canvas.style.borderRadius = self.borderRadius + "px";
         }
+
+        g.fillStyle = self.bgColor;
+        g.fillRect(0, 0, displayWidth, displayHeight);
+
         var scaledFontSize = fontSize * scale;
         g.font = scaledFontSize + "px " + font; 
         for (var x = 0; x < cols; x++) {
