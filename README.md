@@ -1,11 +1,11 @@
 # retro-display
 
 I had this great idea of a game where the user interface was an old-school
-terminal. I came up with this and was ready to code the game, but I 
-had no clue how the end-game would work. Mid-game was a problem too. 
-Early-game needed improvment. Ideas never materialized. 
+terminal. I wrote this code but I had no clue how the end-game would work. 
+Mid-game was a problem too. Early-game needed improvment. 
+Ideas never materialized. 
 
-Don't let good code go to waste and made some javascript consoles using 
+Don't let good code go to waste. I made some javascript consoles using 
 the old-school displays. 
 
 * [Commodore 64](https://blackchip-org.github.io/retro-display/c64/)
